@@ -17,8 +17,4 @@
     <ProjectReference Include="..\SignalR.DataAccessLayer\SignalR.DataAccessLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Concreate\" />
-  </ItemGroup>
-
 </Project>
