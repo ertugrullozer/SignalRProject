@@ -25,7 +25,7 @@ namespace SignalR.BusinessLayer.Concreate
 
         public void Tdelete(Feature entity)
         {
-           _featureService.Delete(entity);
+            _featureService.Delete(entity);
         }
 
         public Feature TGetByID(int id)
@@ -35,11 +35,12 @@ namespace SignalR.BusinessLayer.Concreate
 
         public List<Feature> TGetListAll()
         {
-           return _featureService.GetListAll();
+            return _featureService.GetListAll();
         }
 
         public void Tupdate(Feature entity)
         {
-          _featureService.Update(entity);
+            _featureService.Update(entity);
+        }
     }
 }
