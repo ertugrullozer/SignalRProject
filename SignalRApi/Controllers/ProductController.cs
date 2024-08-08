@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SignalR.BusinessLayer.Abstract;
+using SignalR.DataAccessLayer.Concrete;
 using SignalR.DtoLayer.ProductDto;
 using SignalR.EntityLayer.Entities;
 
@@ -11,32 +14,35 @@ namespace SignalRApi.Controllers
     public class ProductController : ControllerBase
     { 
         private readonly IProductService _productService;
-
-        public ProductController(IProductService productService)
+        private readonly IMapper _mapper;
+        public ProductController(IProductService productService,IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult ProductList() 
+        public IActionResult ProductList()
         {
-            var values= _productService.TGetListAll();
-            return Ok(values);
+            var value = _mapper.Map<List<ResultProductDto>>(_productService.TGetListAll());
 
-        
+            return Ok(value);
+
         }
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createProductDto)
         {
-            Product product = new Product()
+            _productService.Tadd(new Product()
             {
                 ProductName = createProductDto.ProductName,
                 Description = createProductDto.Description,
-                Price = createProductDto.Price,
                 ImageUrl = createProductDto.ImageUrl,
-                ProductStatus = createProductDto.ProductStatus
-            };
-            _productService.Tadd(product);
+                Price = createProductDto.Price,
+                ProductStatus = createProductDto.ProductStatus,
+                
+
+            });
+            
             return Ok("Product Eklendi");
         }
         [HttpDelete]
@@ -51,6 +57,7 @@ namespace SignalRApi.Controllers
         {
             Product product = new Product()
             {
+                ProductID = updateProductDto.ProductID,
                 ProductName = updateProductDto.ProductName,
                 Description = updateProductDto.Description,
                 Price = updateProductDto.Price,
@@ -65,6 +72,23 @@ namespace SignalRApi.Controllers
         {
             var values = _productService.TGetByID(id);
             return Ok(values);
+        }
+        [HttpGet("ProductListWithCategory")]
+        public IActionResult ProductListWithCategory()
+        {
+            var context = new SignalRContext();
+            var values = context.Products.Include(x => x.Category).Select(y => new ResultProductsWithCategory
+            {
+                Description = y.Description,
+                Price = y.Price,
+                ImageUrl= y.ImageUrl,
+                ProductID =y.ProductID,
+                ProductStatus = y.ProductStatus,
+                ProductName = y.ProductName,
+                CategoryName = y.Category.CategoryName
+
+            });
+            return Ok(values.ToList());
         }
     }
 }

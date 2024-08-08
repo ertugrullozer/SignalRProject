@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.DiscontDto;
@@ -11,30 +12,30 @@ namespace SignalRApi.Controllers
     public class DiscountController : ControllerBase
     {
         private readonly IDiscountService _discountService;
-
-        public DiscountController(IDiscountService discountService)
+        private readonly IMapper _mapper;
+        public DiscountController(IDiscountService discountService,IMapper mapper)
         {
             _discountService = discountService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult DiscountList() 
         {
-            var values= _discountService.TGetListAll();
+            var values= _mapper.Map<List<ResultDiscontDto>>(_discountService.TGetListAll());
             return Ok(values);
         
         }
         [HttpPost]
         public IActionResult CreateDiscount(CreateDiscountDto createDiscountDto)
         {
-            Discount discount = new Discount()
+            _discountService.Tadd(new Discount()
             {
-                Title = createDiscountDto.Title,
                 Amount = createDiscountDto.Amount,
                 Description = createDiscountDto.Description,
+                Title = createDiscountDto.Title,
                 ImageUrl = createDiscountDto.ImageUrl
-            };
-            _discountService.Tadd(discount);
+            });
             return Ok("Discount Eklendi");
 
         }
@@ -48,14 +49,15 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateDiscount(UpdateDiscountDto updateDiscountDto)
         {
-            Discount discount = new Discount()
+            _discountService.Tupdate(new Discount()
             {
-                Title = updateDiscountDto.Title,
+                DiscountID=updateDiscountDto.DiscountID,
                 Amount = updateDiscountDto.Amount,
                 Description = updateDiscountDto.Description,
+                Title = updateDiscountDto.Title,
                 ImageUrl = updateDiscountDto.ImageUrl
-            };
-            _discountService.Tupdate(discount);
+
+            });
             return Ok("Discount Güncellendi");
         }
         [HttpGet("GetDiscount")]

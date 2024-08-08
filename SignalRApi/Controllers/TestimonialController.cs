@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.TestimonialDto;
@@ -11,29 +12,30 @@ namespace SignalRApi.Controllers
     public class TestimonialController : ControllerBase
     {
         private readonly ITestimonialService _testimonialService;
+        private readonly IMapper _mapper;
 
-        public TestimonialController(ITestimonialService testimonialService)
+        public TestimonialController(ITestimonialService testimonialService,IMapper mapper) 
         {
             _testimonialService = testimonialService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult TestimonialList() 
         {
-            var values= _testimonialService.TGetListAll();
+            var values= _mapper.Map<List<ResultTestimonialDto>>(_testimonialService.TGetListAll());
             return Ok(values);
         }
         [HttpPost]
         public IActionResult CreateTestimonial(CreateTestimonialDto createTestimonialDto) 
         {
-            Testimonial testimonial = new Testimonial()
+            _testimonialService.Tadd(new Testimonial()
             {
-                Title = createTestimonialDto.Title,
-                Comment = createTestimonialDto.Comment,
-                Name = createTestimonialDto.Name,
-                ImageUrl = createTestimonialDto.ImageUrl,
-                Status = createTestimonialDto.Status
-            };
-            _testimonialService.Tadd(testimonial);
+                Title=createTestimonialDto.Title,
+                Comment=createTestimonialDto.Comment,
+                ImageUrl=createTestimonialDto.ImageUrl,
+                Name=createTestimonialDto.Name,
+                Status=createTestimonialDto.Status
+            });
             return Ok("Testimonial Eklendi");
         
         }
@@ -47,16 +49,16 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateTestimonial(UpdateTestimonialDto updateTestimonialDto)
         {
-            Testimonial testimonial = new Testimonial()
+            _testimonialService.Tupdate(new Testimonial()
             {
+                TestimonialID=updateTestimonialDto.TestimonialID,
                 Title = updateTestimonialDto.Title,
                 Comment = updateTestimonialDto.Comment,
                 Name = updateTestimonialDto.Name,
                 ImageUrl = updateTestimonialDto.ImageUrl,
                 Status = updateTestimonialDto.Status
 
-            };
-            _testimonialService.Tupdate(testimonial);
+            });
             return Ok("Testimonial Güncellendi");
 
         }

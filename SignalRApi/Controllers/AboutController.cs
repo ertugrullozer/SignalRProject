@@ -46,6 +46,7 @@ namespace SignalRApi.Controllers
         {
             About about = new About()
             {
+                AboutID=updateAboutDto.AboutID,
                 Title = updateAboutDto.Title,
                 Description = updateAboutDto.Description,
                 ImageUrl = updateAboutDto.ImageUrl

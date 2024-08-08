@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.ContactDto;
@@ -11,30 +12,31 @@ namespace SignalRApi.Controllers
     public class ContactController : ControllerBase
     {
         private readonly IContactService _contactService;
+        private readonly IMapper _mapper;
 
-        public ContactController(IContactService contactService)
+        public ContactController(IContactService contactService,IMapper mapper)
         {
             _contactService = contactService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult ContactList()
         {
-            var values = _contactService.TGetListAll();
+            var values = _mapper.Map<List<ResultContactDto>>(_contactService.TGetListAll());
             return Ok(values);
 
         }
         [HttpPost]
         public IActionResult CreateContact(CreateContactDto createContactDto)
         {
-            Contact contact = new Contact()
+            _contactService.Tadd(new Contact()
             {
-                Mail = createContactDto.Mail,
                 FooterDescription = createContactDto.FooterDescription,
                 Location = createContactDto.Location,
-                Phone = createContactDto.Phone
-            };
-            _contactService.Tadd(contact);
+                Mail = createContactDto.Mail,
+                Phone = createContactDto.Phone,
+            });
             return Ok("Contact Eklendi");
         }
         [HttpDelete]
@@ -47,14 +49,15 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateContact(UpdateContactDto updateContactDto)
         {
-            Contact contact = new Contact()
+            _contactService.Tupdate(new Contact()
             {
-                Mail = updateContactDto.Mail,
+                ContactID=updateContactDto.ContactID,
                 FooterDescription = updateContactDto.FooterDescription,
                 Location = updateContactDto.Location,
-                Phone = updateContactDto.Phone
-            };
-            _contactService.Tupdate(contact);
+                Phone = updateContactDto.Phone,
+                Mail = updateContactDto.Mail,
+
+            });
             return Ok("Contact Güncellendi");
         }
         [HttpGet("GetContact")]

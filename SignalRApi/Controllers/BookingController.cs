@@ -48,6 +48,7 @@ namespace SignalRApi.Controllers
         {
             Booking booking = new Booking()
             {
+                BookingID=updateBookingDto.BookingID,
                 Mail = updateBookingDto.Mail,
                 Name = updateBookingDto.Name,
                 PersonCount = updateBookingDto.PersonCount,

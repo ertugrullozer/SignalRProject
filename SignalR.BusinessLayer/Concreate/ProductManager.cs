@@ -38,6 +38,11 @@ namespace SignalR.BusinessLayer.Concreate
            return _productDal.GetListAll();
         }
 
+        public List<Product> TGetProductsWithCategories()
+        {
+            return _productDal.GetProductsWithCategories();
+        }
+
         public void Tupdate(Product entity)
         {
             _productDal.Update(entity);
