@@ -34,11 +34,12 @@ namespace SignalRApi.Controllers
         {
             _productService.Tadd(new Product()
             {
-                ProductName = createProductDto.ProductName,
                 Description = createProductDto.Description,
                 ImageUrl = createProductDto.ImageUrl,
-                Price = createProductDto.Price,
+                Price   = createProductDto.Price,
+                ProductName = createProductDto.ProductName,
                 ProductStatus = createProductDto.ProductStatus,
+                CategoryID = createProductDto.CategoryID,
                 
 
             });
