@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SignalRWebUI.Dtos.AboutDtos;
 using SignalRWebUI.Dtos.CategoryDtos;
 using System.Text;
 
@@ -72,12 +73,12 @@ namespace SignalRWebUI.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(UpdateCategoryDtos updateCategoryDtos)
+        public async Task<IActionResult> UpdateCategory( UpdateCategoryDtos updateCategoryDtos)
         {
             var client = _httpClientFactory.CreateClient();
             var jsonData=JsonConvert.SerializeObject(updateCategoryDtos);
             StringContent stringContent = new StringContent(jsonData,Encoding.UTF8,"application/json");
-            var responseMessage= await client.PutAsync("https://localhost:7035/api/Category/", stringContent);
+            var responseMessage= await client.PutAsync("https://localhost:7035/api/Category", stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
