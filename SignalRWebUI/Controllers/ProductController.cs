@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.Dtos.ProductDtos;
 
@@ -24,7 +25,7 @@ namespace SignalRWebUI.Controllers
 			if (responseMessage.IsSuccessStatusCode) 
 			{ 
 				var jsonData= await responseMessage.Content.ReadAsStringAsync();
-				var values= JsonConvert.DeserializeObject<List<ResultProductDtos>>(jsonData);
+				var values= JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
 				return View(values);
 			}
 			return View();
@@ -46,13 +47,13 @@ namespace SignalRWebUI.Controllers
 			return View();
 		}
 		[HttpPost]
-		public async Task<IActionResult> CreateProduct(CreateProductDtos createProductDtos)
+		public async Task<IActionResult> CreateProduct(CreateProductDto createProductDtos)
 		{
 			createProductDtos.ProductStatus = true;
 			var client =_httpClientFactory.CreateClient();
 			var jsonData= JsonConvert.SerializeObject(createProductDtos);
 			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-			var responseMessage= await client.PostAsync("https://localhost:7035/api/Product/", stringContent);
+			var responseMessage= await client.PostAsync("https://localhost:7035/api/Product", stringContent);
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
@@ -72,34 +73,44 @@ namespace SignalRWebUI.Controllers
 		[HttpGet]
 		public async Task<IActionResult> UpdateProduct(int id)
 		{
+			var client1 = _httpClientFactory.CreateClient();
+			var responseMessage1 = await client1.GetAsync("https://localhost:7035/api/Category/");
+			var jsonData1 = await responseMessage1.Content.ReadAsStringAsync();
+			var values1 = JsonConvert.DeserializeObject<List<ResultCategoryDtos>>(jsonData1);
+			List<SelectListItem> values2 = (from x in values1
+										  select new SelectListItem
+										  {
+											  Text = x.CategoryName,
+											  Value = x.CategoryID.ToString()
+										  }).ToList();
+
+			ViewBag.v = values2;
 			var client = _httpClientFactory.CreateClient();
 			var responseMessage = await client.GetAsync($"https://localhost:7035/api/Product/{id}");
 			if (responseMessage.IsSuccessStatusCode)
 			{
-				var jsonData= await responseMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<UpdateProductDtos>(jsonData);
+				var jsonData = await responseMessage.Content.ReadAsStringAsync();
+				var values = JsonConvert.DeserializeObject<UpdateProductDto>(jsonData);
 				return View(values);
 			}
-			 
 			return View();
 		}
 		[HttpPost]
-		public async Task<IActionResult>UpdateProduct(UpdateProductDtos updateProductDtos)
+		public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProductDto)
 		{
-			var client= _httpClientFactory.CreateClient();
-			var jsonData=JsonConvert.SerializeObject(updateProductDtos);
-			StringContent stringContent = new StringContent(jsonData,Encoding.UTF8,"application/json");
-			var responseMessage= await client.PutAsync("https://localhost:7035/api/Product/", stringContent);
+			updateProductDto.ProductStatus = true;
+			var client = _httpClientFactory.CreateClient();
+			var jsonData = JsonConvert.SerializeObject(updateProductDto);
+			StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+			var responseMessage = await client.PutAsync("https://localhost:7035/api/Product/", stringContent);
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				return RedirectToAction("Index");
 			}
-
 			return View();
-
 		}
 
-		
-
 	}
+
 }
+

@@ -53,27 +53,31 @@ namespace SignalRApi.Controllers
             _productService.Tdelete(values);
             return Ok("Product Silindi");
         }
-        [HttpPut]
-        public IActionResult UpdateProduct(UpdateProductDto updateProductDto) 
-        {
-            Product product = new Product()
-            {
-                ProductID = updateProductDto.ProductID,
-                ProductName = updateProductDto.ProductName,
-                Description = updateProductDto.Description,
-                Price = updateProductDto.Price,
-                ImageUrl = updateProductDto.ImageUrl,
-                ProductStatus = updateProductDto.ProductStatus
-            };
-            _productService.Tupdate(product);
-            return Ok("Product Güncellendi");
+
+
+		[HttpGet("{id}")]
+		public IActionResult GetProduct(int id)
+		{
+			var value = _productService.TGetByID(id);
+			return Ok(value);
+		}
+		[HttpPut]
+		public IActionResult UpdateProduct(UpdateProductDto updateProductDto)
+		{
+			_productService.Tupdate(new Product()
+			{
+				Description = updateProductDto.Description,
+				ImageUrl = updateProductDto.ImageUrl,
+				Price = updateProductDto.Price,
+				ProductName = updateProductDto.ProductName,
+				ProductStatus = updateProductDto.ProductStatus,
+				ProductID = updateProductDto.ProductID,
+				CategoryID = updateProductDto.CategoryID
+			});
+			return Ok("Ürün Bilgisi Güncellendi");
+			
         }
-        [HttpGet("GetProduct")]
-        public IActionResult GetProduct(int id)
-        {
-            var values = _productService.TGetByID(id);
-            return Ok(values);
-        }
+   
         [HttpGet("ProductListWithCategory")]
         public IActionResult ProductListWithCategory()
         {
@@ -86,7 +90,8 @@ namespace SignalRApi.Controllers
                 ProductID =y.ProductID,
                 ProductStatus = y.ProductStatus,
                 ProductName = y.ProductName,
-                CategoryName = y.Category.CategoryName
+                CategoryName = y.Category.CategoryName,
+                
 
             });
             return Ok(values.ToList());
