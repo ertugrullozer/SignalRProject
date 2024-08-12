@@ -1,0 +1,53 @@
+﻿@model CreateFeatureDtos
+@{
+    ViewData["Title"] = "CreateFeature";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="content">
+	<div class="container-fluid">
+		<h4 class="page-title">Öne Çıkanlar ile ilgili işlemler</h4>
+		<div class="row">
+			<div class="col-md-12">
+				<form method="post">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Öne Çıkanlar Ekle</div>
+						</div>
+						<div class="card-body">
+							<div class="form-group">
+								<label for="Title1">Başlık1</label>
+								<input type="text" class="form-control" asp-for="Title1" id="Title1">
+							</div>
+							<div class="form-group">
+								<label for="Title2">Başlık2</label>
+								<input type="text" class="form-control" asp-for="Title2" id="Title2">
+							</div>
+							<div class="form-group">
+								<label for="Title3">Başlık3</label>
+								<input type="text" class="form-control" asp-for="Title3" id="Title3">
+							</div>
+
+							<div class="form-group">
+								<label for="Description1">Açıklma1</label>
+								<input type="text" class="form-control" asp-for="Description1" id="Description1">
+							</div>
+							<div class="form-group">
+								<label for="Description2">Açıklma2</label>
+								<input type="text" class="form-control" asp-for="Description2" id="Description2">
+							</div>	
+							<div class="form-group">
+								<label for="Description3">Açıklma3</label>
+								<input type="text" class="form-control" asp-for="Description3" id="Description3">
+							</div>
+						</div>
+						<div class="card-action">
+							<button class="btn btn-success">Ekle</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
