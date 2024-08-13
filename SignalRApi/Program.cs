@@ -10,16 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(opt =>
 {
-    opt.AddPolicy("CorsPolicy", builder =>
-    {
-        builder.AllowAnyHeader()
-        .AllowAnyMethod()
-        .SetIsOriginAllowed((host) => true)
-        .AllowCredentials();
-    });
+	opt.AddPolicy("CorsPolicy", builder =>
+	{
+		builder.AllowAnyHeader()
+		.AllowAnyMethod()
+		.SetIsOriginAllowed((host) => true)
+		.AllowCredentials();
+	});
 });
 
-
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<SignalRContext>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -69,10 +69,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("CorsPolicy");
-app.MapHub<SignalRHub>("/signalrhub");
 
-//localhost://1234/swagger/category/ýndex
-//localhost://1234/signalrhub ----------- signarlR istekte bulunacaðýmýzý belirtiyoruz
+
+
 
 app.UseHttpsRedirection();
 
@@ -80,4 +79,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHub<SignalRHub>("/signalrhub");
+
 app.Run();
+//localhost://1234/swagger/category/ýndex
+//localhost://1234/signalrhub ----------- signarlR istekte bulunacaðýmýzý belirtiyoruz
