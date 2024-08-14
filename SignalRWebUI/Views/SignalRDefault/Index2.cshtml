@@ -27,7 +27,7 @@
                                     connection.invoke("SendCAtegoryCount");
                                 },1000);
 
-                            }).catch((err) => { console.log(err) });
+                            }).catch((err) => { console.log(err) }); 
 
                             connection.on("ReciveCategoryCount", (value) => {
                                 $("#categorycount").text(value)

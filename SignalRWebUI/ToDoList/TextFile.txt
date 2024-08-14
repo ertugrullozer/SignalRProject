@@ -1,0 +1,23 @@
+﻿--CategoryCount-------------------------------ok-
+--ProductCount--------------------------------ok-                             
+--Aktif Kategori Sayısı-----------------------ok-
+--Pasif Kategori Sayısı-----------------------ok-
+
+
+--Kategori Adına Göre Ürün Sayısı1------------ok-
+--Kategori Adına Göre Ürün Sayısı2------------ok-
+
+
+--Ortalama Fiyat------------------------------ok-
+--En Düşük Ürün Fiyatı------------------------ok-
+--En Yüksek Ürün Fiyatı-----------------------ok-
+--Ortalama Hamburger Fiyatı-------------------
+
+
+--Toplam Sipariş Sayısı-----------------------
+--Aktif Sipariş Sayısı------------------------
+--Pasif Sipariş Sayısı------------------------
+--Son Sipariş Sayısı--------------------------
+--Kasadaki Tutar------------------------------
+--Bugünkü Kazanç------------------------------
+--Masa Sayısı---------------------------------
