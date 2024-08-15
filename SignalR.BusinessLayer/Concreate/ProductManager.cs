@@ -45,6 +45,11 @@ namespace SignalR.BusinessLayer.Concreate
             return _productDal.GetProductsWithCategories();
         }
 
+        public decimal TProductAvgPriceByHomburger()
+        {
+           return _productDal.ProductAvgPriceByHomburger();
+        }
+
         public int TProductCount()
         {
             return _productDal.ProductCount();
