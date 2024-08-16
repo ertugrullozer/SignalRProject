@@ -16,7 +16,6 @@
 
 --Toplam Sipariş Sayısı-----------------------ok-
 --Aktif Sipariş Sayısı------------------------ok-
---Pasif Sipariş Sayısı------------------------
 --Son Sipariş Sayısı--------------------------ok-
 --Kasadaki Tutar------------------------------
 --Bugünkü Kazanç------------------------------
