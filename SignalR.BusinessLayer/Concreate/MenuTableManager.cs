@@ -18,6 +18,11 @@ namespace SignalR.BusinessLayer.Concreate
             _menuTableDal = menuTableDal;
         }
 
+        public int TActiveMenuTableCount()
+        {
+         return  _menuTableDal.ActiveMenuTableCount();
+        }
+
         public void Tadd(MenuTable entity)
         {
             throw new NotImplementedException();

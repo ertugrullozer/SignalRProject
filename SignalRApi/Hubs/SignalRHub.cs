@@ -9,11 +9,15 @@ namespace SignalRApi.Hubs
 		private readonly ICategoryService _categoryService;
 		private readonly IProductService _productService;
 		private readonly IOrderService _orderService;
-        public SignalRHub(ICategoryService categoryService,IProductService productService,IOrderService orderService)
+		private readonly IMoneyCaseService _moneyCaseService;
+		private readonly IMenuTableService _menuTableService;
+        public SignalRHub(ICategoryService categoryService,IProductService productService,IOrderService orderService,IMoneyCaseService moneyCaseService,IMenuTableService menuTableService)
         {
             _categoryService = categoryService;
 			_productService = productService;
 			_orderService = orderService;
+			_moneyCaseService = moneyCaseService;
+			_menuTableService = menuTableService;
         }
 
 		public async Task SendStatistic()
@@ -53,8 +57,30 @@ namespace SignalRApi.Hubs
 
 			var value12=_orderService.TTotalOrderCount();
 			await Clients.All.SendAsync("ReciveTotalOrderCount", value12);
+
+			var value13 = _orderService.TLastOrderPrice();
+			await Clients.All.SendAsync("ReciveLastOrderPrice", value13.ToString("0.00") + "₺");
+
+			var value14=_moneyCaseService.TTotalMoneyCaseAmount();
+			await Clients.All.SendAsync("ReciveTotalMoneyCaseAmount", value14.ToString("0.00") + "₺");
+
+			//16 daha sonra eklenecek
+
+			var value16 = _menuTableService.TMenuTableCount();
+			await Clients.All.SendAsync("ReciveMenuTableCount", value16);
 		}
 		
+		public async Task SendProgress()
+		{
+			var value = _moneyCaseService.TTotalMoneyCaseAmount();
+			await Clients.All.SendAsync("ReciveTotalMoneyCaseAmount", value.ToString("0.00")+"₺");
+
+			var value2 = _orderService.TActiveOrderCount();
+			await Clients.All.SendAsync("ReciveActiveOrderCount", value2);
+			
+			var value3= _menuTableService.TActiveMenuTableCount();
+			await Clients.All.SendAsync("ReciveActiveMenuTableCount", value3);
+		}
 
 	}
 }
